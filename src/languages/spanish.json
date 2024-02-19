@@ -1,0 +1,20 @@
+{
+  "Payment": {
+    "formCard": {
+      "cardName": "Nombre del propietario",
+      "cardNumber": "Número de la tarjeta",
+      "cardMonth": "Mes de Vecimiento",
+      "cardYear": "Año de Vecimiento",
+      "cvv": "CVV"
+    },
+    "validationsCardText": {
+      "required": "Campo requerido",
+      "cardName": "Solo se aceptan caracteres",
+      "cardNameMinMax": "El nombre puede tener entre 3 y 10 caracteres",
+      "cardNumber": "Nro tarjeta debe tener 16 digitos",
+      "cardMonth": "El mes debe estar entre 1 y 12",
+      "cardYear": "El año debe estar entre 2023 y 2040",
+      "cvv": "CVV"
+    }
+  }
+}
