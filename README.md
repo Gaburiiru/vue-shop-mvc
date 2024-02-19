@@ -1,4 +1,5 @@
 # vue-shop-mvc
+link: https://vue-shop-mvc.netlify.app/
 
 ## Project setup
 ```
