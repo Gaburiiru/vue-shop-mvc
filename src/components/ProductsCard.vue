@@ -1,7 +1,8 @@
 <template>
   <v-container>
+    <Register :viewModalProp="viewLogin" @viewModalChanged="viewLoginChanged" />
     <ShopCart
-      v-if="!isAdmin"
+      v-if="!isAdmin && isUserValid !== null"
       :cartArrayProp="cartArray"
       :totalCartProp="totalPrice()"
       @remove-item="removeItemFromCart"
@@ -172,7 +173,7 @@
             <v-btn
               color="success"
               rounded
-              @click="clickAdd(productSelected, cantProduct)"
+              @click="clickAdd(productSelected, cantProduct), isLogin()"
               >Agregar</v-btn
             >
           </v-row>
@@ -181,7 +182,7 @@
     </v-dialog>
 
     <!-- modal product delete admin -->
-    <v-dialog v-if="productSelected" v-model="dialogDelete" max-width="500">
+    <v-dialog v-if="productSelected" v-model="dialogDelete" width="500">
       <v-card class="rounded-lg">
         <v-card-title class="text-h5 grey lighten-2 d-flex justify-center mb-4">
           {{ productSelected.titulo }}
@@ -447,6 +448,7 @@
 <script>
 import products from "@/store/products";
 import ShopCart from "./ShopCart.vue";
+import Register from "./Register.vue";
 import index from "@/store/index";
 import VuePaycard from "vue-paycard";
 import { validationMixin } from "vuelidate";
@@ -514,6 +516,7 @@ export default {
       cantProduct: 1,
       cartArray: [],
       isAdmin: false,
+      isUserValid: null,
       dialogDelete: false,
       dialogEdit: false,
       rules: {
@@ -521,17 +524,32 @@ export default {
         min: (v) => v.length >= 5 || "ingrese un minimo de 5 caracteres.",
       },
       dialogShop: false,
+      viewLogin: false,
     };
   },
   components: {
     VuePaycard,
+    ShopCart,
+    Register,
   },
   mounted() {
+    const user = this.userData;
+    if (user) {
+      this.isUserValid = user;
+    } else {
+      index.dispatch("getUser").then(async () => {
+        this.isUserValid = user;
+      });
+      console.log(this.isUserValid);
+    }
     this.isAdmin = index.state.isAdmin;
     products.dispatch("setArrayProduct");
     this.search = products.state.search;
   },
   computed: {
+    userData() {
+      return index.state.user;
+    },
     filteredProducts() {
       return products.getters.productFilter;
     },
@@ -750,15 +768,20 @@ export default {
     flipCard(status) {
       this.isCardFlipped = status;
     },
-  },
-  components: {
-    ShopCart,
+    isLogin() {
+      if (this.isUserValid === null) {
+        this.viewLogin = true;
+      }
+    },
+    viewLoginChanged(Boolean) {
+      this.viewLogin = Boolean;
+    },
   },
 };
 </script>
 
 <style>
-/* #img:hover {
+#img:hover {
   position: relative;
 }
 
@@ -789,5 +812,5 @@ export default {
   #formSmall {
     justify-content: center;
   }
-} */
+}
 </style>
