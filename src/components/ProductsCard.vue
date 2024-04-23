@@ -225,7 +225,7 @@
     >
       <v-card rounded="lg">
         <v-card-title class="text-h5 grey lighten-2 d-flex justify-center mb-4">
-          Editar producto
+          Editar productos
         </v-card-title>
         <v-container>
           <v-text-field
